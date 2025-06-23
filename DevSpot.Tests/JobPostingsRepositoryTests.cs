@@ -1,7 +1,9 @@
 ﻿using DevSpot.Data;
 using DevSpot.Models;
 using DevSpot.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using NuGet.ContentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,12 +54,30 @@ namespace DevSpot.Tests
             //assert
             Assert.NotNull(result);
 
-            Assert.Equal("Test Description", result.Title);
+            Assert.Equal("Test Title", result.Title);
 
+        }
 
+        [Fact]
+        public async Task GetByUdAsync_ShouldReturnJobPosting()
+        {
+            var db = CreateDbContext();
+            var jobPosting = new JobPosting
+            {
+                Title = "Test Title",
+                Description = "Test Description",
+                PostedDate = DateTime.Now,
+                Company = "Test Company",
+                Location = "Test Location",
+                UserId = "TestUserId"
+            };
 
+            await db.JobPostings.AddAsync(jobPosting);
+            await db.SaveChangesAsync();
 
-
+            var result = await repository.GetIdAsync(JobPosting.Id);
+            Assert.NotNull(result);
+            Assert.Equal("Test Title", result.Title);
         }
     }
 }
