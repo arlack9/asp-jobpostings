@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using DevSpot.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using DevSpot.Constants;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace DevSpot.Controllers
 {
@@ -26,6 +27,17 @@ namespace DevSpot.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
+            if( User.IsInRole(Roles.Employee)) //restricts filtered view to employee only
+            {
+                // If the user is an admin, show all job postings
+                var alljobPostings = await _repository.GetAllAsync();
+                //return View(jobPostings);
+
+                var userId = _userManager.GetUserId(User);
+
+                var filteredJobPostings = alljobPostings.Where(jp => jp.UserId == userId);
+                return View(filteredJobPostings);
+            }
             var jobPostings = await _repository.GetAllAsync();
             return View(jobPostings);
 
