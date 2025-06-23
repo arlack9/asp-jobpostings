@@ -51,10 +51,10 @@ namespace DevSpot.Controllers
                 };
                 //jobPosting.UserId = _userManager.GetUserId(User);
                 await _repository.AddAsync(jobPosting);
-                return RedirectToAction(nameof(Index));
+                
             }
-           
-            return View(jobPostingVm); // IF MOdelState not valid go to View page.
+            return RedirectToAction(nameof(Index));
+            //return View(jobPostingVm); // IF MOdelState not valid go to View page.
         }
 
     }
