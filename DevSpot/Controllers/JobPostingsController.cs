@@ -62,5 +62,13 @@ namespace DevSpot.Controllers
             //return View(jobPostingVm); // IF MOdelState not valid go to View page.
         }
 
+        //JobPostings/Delete/5
+        [HttpDelete]
+        [Authorize(Roles = "Admin, Employer")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return Ok();
+        }
+
     }
 }
